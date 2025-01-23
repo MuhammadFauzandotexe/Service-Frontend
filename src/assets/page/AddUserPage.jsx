@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 
 const AddUserPage = () => {
   const [formData, setFormData] = useState({
+    userId: "",
     firstname: "",
     lastname: "",
     email: "",
@@ -65,6 +66,15 @@ const AddUserPage = () => {
   return (
     <Navbar>
       <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow-md">
+        {/* <Input
+          id="userId"
+          name="userId"
+          inputName="User Id"
+          placeholder="Masukkan User Id"
+          value={formData.userId}
+          onChange={handleChange}
+        /> */}
+
         <Input
           id="firstname"
           name="firstname"
@@ -73,6 +83,7 @@ const AddUserPage = () => {
           value={formData.firstname}
           onChange={handleChange}
         />
+
         <Input
           id="lastname"
           name="lastname"

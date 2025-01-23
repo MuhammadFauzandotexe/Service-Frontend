@@ -10,7 +10,7 @@ const Input = (props) => {
         {props.inputName}
       </label>
       <input
-        className="w-full h-12 px-5 border-gray-300 outline mt-4 rounded"
+        className="w-full h-10 px-5 border-gray-300 outline mt-4 rounded"
         id={props.id}
         name={props.name}
         type="text"

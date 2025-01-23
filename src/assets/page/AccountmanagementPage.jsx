@@ -16,6 +16,8 @@ const AccountManagementPage = () => {
           "http://localhost:8085/api/v1/employee"
         );
         setUsers(response.data.data);
+        console.log(response.data.data);
+
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -30,7 +32,7 @@ const AccountManagementPage = () => {
     Swal.fire({
       title: "User Information",
       html: `
-        <p><strong>ID:</strong> ${rowData.id}</p>
+        <p><strong>Employee Id:</strong> ${rowData.employeeId}</p>
         <p><strong>Firstname:</strong> ${rowData.firstname}</p>
         <p><strong>Lastname:</strong> ${rowData.lastname}</p>
         <p><strong>Email:</strong> ${rowData.email}</p>
@@ -122,7 +124,7 @@ const AccountManagementPage = () => {
     <Navbar pageName="Account Management">
       <div className="relative overflow-x-auto rounded-md">
         {editingUser && (
-          <div className="mb-4 p-4 bg-white rounded-md shadow-md">
+          <div className="mb-6 p-8 bg-white rounded-md shadow-md">
             <h2 className="text-lg font-semibold mb-4">Edit User</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -134,7 +136,7 @@ const AccountManagementPage = () => {
                   name="firstname"
                   value={editingUser.firstname}
                   onChange={handleEditChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-2 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
                 />
               </div>
               <div>
@@ -146,7 +148,7 @@ const AccountManagementPage = () => {
                   name="lastname"
                   value={editingUser.lastname}
                   onChange={handleEditChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
                 />
               </div>
               <div>
@@ -158,7 +160,7 @@ const AccountManagementPage = () => {
                   name="email"
                   value={editingUser.email}
                   onChange={handleEditChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
                 />
               </div>
               <div>
@@ -170,7 +172,7 @@ const AccountManagementPage = () => {
                   name="division"
                   value={editingUser.division}
                   onChange={handleEditChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
                 />
               </div>
               <div>
@@ -182,7 +184,20 @@ const AccountManagementPage = () => {
                   name="jobTitle"
                   value={editingUser.jobTitle}
                   onChange={handleEditChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Employee ID
+                </label>
+                <input
+                  type="text"
+                  name="jobTitle"
+                  readOnly
+                  value={editingUser.employeeId}
+                  onChange={handleEditChange}
+                  className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-m"
                 />
               </div>
             </div>
