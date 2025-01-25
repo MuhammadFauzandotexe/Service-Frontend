@@ -2,23 +2,38 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../layout/Navbar";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AttendanceRecordPage = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAttendanceRecords = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8085/api/v1/attendance"
+          "http://localhost:8085/api/v1/attendance",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         setRecords(response.data.data);
         setLoading(false);
       } catch (error) {
         setError(error);
         setLoading(false);
+        if (error.response && error.response.status === 401) {
+          console.log("Unauthorized! Redirecting to login...");
+          localStorage.removeItem("jwt");
+          navigate("/login");
+        } else {
+          console.error("Gagal mengambil data:", error);
+        }
       }
     };
 

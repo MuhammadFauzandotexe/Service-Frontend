@@ -2,26 +2,37 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../layout/Navbar";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AccountManagementPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8085/api/v1/employee"
+          "http://localhost:8085/api/v1/employee",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         setUsers(response.data.data);
-        console.log(response.data.data);
-
         setLoading(false);
       } catch (error) {
-        setError(error);
-        setLoading(false);
+        if (error.response && error.response.status === 401) {
+          console.log("Unauthorized! Redirecting to login...");
+          localStorage.removeItem("jwt");
+          navigate("/login");
+        } else {
+          console.error("Gagal mengambil data:", error);
+        }
       }
     };
 
@@ -58,7 +69,13 @@ const AccountManagementPage = () => {
 
       if (result.isConfirmed) {
         await axios.delete(
-          `http://localhost:8085/api/v1/employee/${rowData.id}`
+          `http://localhost:8085/api/v1/employee/${rowData.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         setUsers(users.filter((user) => user.id !== rowData.id));
         Swal.fire("Deleted!", "The user has been deleted.", "success");
@@ -84,7 +101,13 @@ const AccountManagementPage = () => {
     try {
       await axios.put(
         `http://localhost:8085/api/v1/employee/${editingUser.id}`,
-        editingUser
+        editingUser,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       setUsers((prevUsers) =>
         prevUsers.map((user) =>

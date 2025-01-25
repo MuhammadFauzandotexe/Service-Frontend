@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../layout/Navbar";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ReportGenerator = () => {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token === null || token === "") {
+      console.log("Unauthorized! Redirecting to login...");
+      localStorage.removeItem("jwt");
+      navigate("/login");
+    }
+  }, []);
   const handleDateChange = (event) => {
     setSelectedDate(new Date(event.target.value));
   };
@@ -21,7 +31,16 @@ const ReportGenerator = () => {
       },
     });
     try {
-      const response = await axios.get(url, { responseType: "blob" });
+      const response = await axios.get(
+        url,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            "Content-Type": "application/json",
+          },
+        },
+        { responseType: "blob" }
+      );
       const blob = new Blob([response.data], {
         type: response.headers["content-type"],
       });
@@ -66,7 +85,7 @@ const ReportGenerator = () => {
     console.log(day);
     await downloadFile(
       `http://localhost:8085/api/v1/file/attendance?year=${year}&month=${month}&day=${day}`,
-      `$attendance{year}${month}${day}.txt`,
+      `$attendance${year}${month}${day}.txt`,
       "Memproses Data Kehadiran..."
     );
   };

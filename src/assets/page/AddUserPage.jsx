@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../moleculs/Input";
 import Navbar from "../layout/Navbar";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AddUserPage = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token === null || token === "") {
+      console.log("Unauthorized! Redirecting to login...");
+      localStorage.removeItem("jwt");
+      navigate("/login");
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     userId: "",
     firstname: "",
@@ -31,7 +42,13 @@ const AddUserPage = () => {
     try {
       const response = await axios.post(
         "http://localhost:8085/api/v1/employee",
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Form data:", formData);
       console.log("Response data:", response.data);
@@ -51,6 +68,13 @@ const AddUserPage = () => {
         jobTitle: "",
       });
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Unauthorized! Redirecting to login...");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        console.error("Gagal mengambil data:", error);
+      }
       console.error("Error adding user:", error);
       Swal.fire({
         icon: "error",
@@ -66,15 +90,6 @@ const AddUserPage = () => {
   return (
     <Navbar>
       <form onSubmit={handleSubmit} className="p-4 bg-white rounded shadow-md">
-        {/* <Input
-          id="userId"
-          name="userId"
-          inputName="User Id"
-          placeholder="Masukkan User Id"
-          value={formData.userId}
-          onChange={handleChange}
-        /> */}
-
         <Input
           id="firstname"
           name="firstname"
