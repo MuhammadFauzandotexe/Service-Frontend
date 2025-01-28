@@ -37,7 +37,7 @@ function LoginPage() {
         });
       } else {
         localStorage.setItem("jwt", response.data.data.jwt);
-        navigate("/account-management");
+        navigate("/user");
       }
     } catch (error) {
       Swal.fire({

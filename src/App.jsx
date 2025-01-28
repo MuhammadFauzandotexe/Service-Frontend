@@ -4,6 +4,9 @@ import AccountManagementPage from "./assets/page/AccountmanagementPage";
 import LoginPage from "./assets/page/LoginPage";
 import AddUserPage from "./assets/page/AddUserPage";
 import ReportGenerator from "./assets/page/ReportGenerator";
+import CustomerNavbar from "./assets/layout/CustomerNavbar";
+import CustomerPage from "./assets/page/CustomerPage";
+import BillPage from "./assets/page/Billpage";
 
 function App() {
   return (
@@ -19,6 +22,8 @@ function App() {
               path="/account-management"
               element={<AccountManagementPage />}
             />
+            <Route path="/user" element={<CustomerPage />} />
+            <Route path="/bill" element={<BillPage />} />
           </Routes>
         </Router>
       </>
